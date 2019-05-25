@@ -54,7 +54,7 @@ while :; do
   
   # Boucle de 5 minute :
   for j in {1..5}; do
-    for j in {1..60}; do
+    for j in {1..12}; do
       if [ $COUL -eq "1" ]; then
         echo "green" > /sys/class/leds/a3g_led/color
         echo "no" > /sys/class/leds/a3g_led/blink
@@ -100,8 +100,8 @@ while :; do
         fi;
       fi
 
-      # Attente d'une seconde avant actualisation de la led à nouveau
-      sleep 1
+      # Attente de 5 secondes avant actualisation de la led à nouveau
+      sleep 5
     done
   done
 done
