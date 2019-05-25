@@ -31,8 +31,8 @@ while :; do
   COULEUR_OK=0
   
   # Boucle de 5 minute :
-  for j in {1..5};
-    for j in {1..60};
+  for j in {1..5}; do
+    for j in {1..60}; do
       if [ $COUL -eq "1" ]; then
         echo "green" > /sys/class/leds/a3g_led/color
         echo "no" > /sys/class/leds/a3g_led/blink
