@@ -1,0 +1,70 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:        mfvigiled
+# Required-Start:  $network $remote_fs $syslog
+# Required-Stop:   $network $remote_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Use the My Book Live front led in order to display Meteo-France vigilance
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
+
+. /lib/lsb/init-functions
+source /etc/priority.conf
+
+NAME=mfvigiled
+DAEMON=/usr/local/sbin/mfvigiled.sh
+PIDFILE=/var/run/mfvigiled.pid
+
+test -x $DAEMON || exit 5
+
+RUNASUSER=root
+UGID=$(getent passwd $RUNASUSER | cut -f 3,4 -d:) || true
+
+case $1 in
+	start)
+		log_daemon_msg "Starting app" "mfvigiled"
+		if [ -z "$UGID" ]; then
+			log_failure_msg "user \"$RUNASUSER\" does not exist"
+			exit 1
+		fi
+		renice 0 -p $$
+		start-stop-daemon --start --nicelevel $mfvigiled_nice --quiet --oknodo --pidfile $PIDFILE --make-pidfile --background --exec $DAEMON --
+		status=$?
+		log_end_msg $status
+  		;;
+	stop)
+		log_daemon_msg "Stopping app" "mfvigiled"
+  		start-stop-daemon --stop --pidfile $PIDFILE
+		log_end_msg $?
+  		;;
+	restart|force-reload)
+		$0 stop && sleep 2 && $0 start
+  		;;
+	try-restart)
+		if $0 status >/dev/null; then
+			$0 restart
+		else
+			exit 0
+		fi
+		;;
+	reload)
+		exit 3
+		;;
+	status)
+		pidofproc -p $PIDFILE $DAEMON >/dev/null
+		status=$?
+		if [ $status -eq 0 ]; then
+			log_success_msg "mfvigiled is running."
+		else
+			log_failure_msg "mfvigiled is not running."
+		fi
+		exit $status
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart|try-restart|force-reload|status}"
+		exit 2
+		;;
+esac
