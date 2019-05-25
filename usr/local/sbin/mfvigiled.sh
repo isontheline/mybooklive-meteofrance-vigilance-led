@@ -32,9 +32,9 @@ while :; do
   
   # Pas propre :(
   COUL1=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
-  COUL2=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
-  COUL3=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
-  COUL4=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
+  COUL2=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"2\"" | wc -l)
+  COUL3=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"3\"" | wc -l)
+  COUL4=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"4\"" | wc -l)
   
   if [ $COUL1 -eq 1 ]; then
     COUL="1"
