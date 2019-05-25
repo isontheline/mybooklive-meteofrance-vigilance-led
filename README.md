@@ -15,3 +15,6 @@ chmod +x /etc/init.d/mfvigiled
 
 ## Stop
 /etc/init.d/mfvigiled stop
+
+## Start at boot time
+update-rc.d mfvigiled defaults
