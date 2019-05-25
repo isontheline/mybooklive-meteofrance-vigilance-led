@@ -23,7 +23,37 @@ while :; do
   # Vigilance jaune : coul="2"
   # Vigilance orange : coul="3"
   # Vigilance rouge : coul="4"
+  COUL="1"
+  COULEUR_OK=0
   
+  if [ $COUL -eq "1" ]; then
+    echo "green" > /sys/class/leds/a3g_led/color
+    echo "no" > /sys/class/leds/a3g_led/blink
+    COULEUR_OK=1
+  fi
+  
+  if [ $COUL -eq "2" ]; then
+    echo "yellow" > /sys/class/leds/a3g_led/color
+    echo "no" > /sys/class/leds/a3g_led/blink
+    COULEUR_OK=1
+  fi
+  
+  if [ $COUL -eq "3" ]; then
+    echo "yellow" > /sys/class/leds/a3g_led/color
+    echo "yes" > /sys/class/leds/a3g_led/blink
+    COULEUR_OK=1
+  fi
+  
+  if [ $COUL -eq "4" ]; then
+    echo "red" > /sys/class/leds/a3g_led/color
+    echo "yes" > /sys/class/leds/a3g_led/blink
+    COULEUR_OK=1
+  fi
+  
+  if [ $COULEUR_OK -eq 0 ]; then
+    echo "blue" > /sys/class/leds/a3g_led/color
+    echo "yes" > /sys/class/leds/a3g_led/blink
+  fi
 
   # Attente de 10 minutes avant la prochaine actualisation
   sleep 600
