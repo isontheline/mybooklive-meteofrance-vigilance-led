@@ -1,0 +1,80 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:        standby
+# Required-Start:  $network $remote_fs $syslog
+# Required-Stop:   $network $remote_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Start standby daemon
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
+
+. /lib/lsb/init-functions
+source /etc/priority.conf
+
+NAME=standby
+DAEMON=/usr/local/sbin/monitorio.sh
+PIDFILE=/var/run/standby.pid
+
+#TALLY_PIDFILE is duplicated from ./scripts/monitorio.sh as wd-nas does not support sharing variables in config.ini.
+#When this is fixed, we should go to one definition.
+TALLY_PIDFILE=/var/run/tally.pid
+TALLY_DAEMON=/usr/local/bin/tally
+
+test -x $DAEMON || exit 5
+
+RUNASUSER=root
+UGID=$(getent passwd $RUNASUSER | cut -f 3,4 -d:) || true
+
+
+case $1 in
+	start)
+		log_daemon_msg "Starting standby monitor" "monitorio"
+		if [ -z "$UGID" ]; then
+			log_failure_msg "user \"$RUNASUSER\" does not exist"
+			exit 1
+		fi
+		renice 0 -p $$
+		start-stop-daemon --start --nicelevel $monitorio_nice --quiet --oknodo --pidfile $PIDFILE --make-pidfile --background --exec $DAEMON --
+		status=$?
+		log_end_msg $status
+  		;;
+	stop)
+		log_daemon_msg "Stopping standby monitor" "monitorio"
+  		start-stop-daemon --stop --pidfile $PIDFILE
+		log_end_msg $?
+		if [ -f $TALLY_DAEMON ]; then
+			start-stop-daemon --stop --pidfile $TALLY_PIDFILE
+			log_end_msg $?
+		fi
+  		;;
+	restart|force-reload)
+		$0 stop && sleep 2 && $0 start
+  		;;
+	try-restart)
+		if $0 status >/dev/null; then
+			$0 restart
+		else
+			exit 0
+		fi
+		;;
+	reload)
+		exit 3
+		;;
+	status)
+		pidofproc -p $PIDFILE $DAEMON >/dev/null
+		status=$?
+		if [ $status -eq 0 ]; then
+			log_success_msg "standby monitor is running."
+		else
+			log_failure_msg "standby monitor is not running."
+		fi
+		exit $status
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart|try-restart|force-reload|status}"
+		exit 2
+		;;
+esac
