@@ -30,6 +30,28 @@ while :; do
   COUL="0"
   COULEUR_OK=0
   
+  # Pas propre :(
+  COUL1=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
+  COUL2=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
+  COUL3=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
+  COUL4=$(cat /tmp/NXFR33_LFPW_.xml | grep "dep=\"$DEPARTEMENT_A_VERIFIER\" coul=\"1\"" | wc -l)
+  
+  if [ $COUL1 -eq 1 ]; then
+    COUL="1"
+  fi
+  
+  if [ $COUL2 -eq 1 ]; then
+    COUL="2"
+  fi
+  
+  if [ $COUL3 -eq 1 ]; then
+    COUL="3"
+  fi
+  
+  if [ $COUL4 -eq 1 ]; then
+    COUL="4"
+  fi
+  
   # Boucle de 5 minute :
   for j in {1..5}; do
     for j in {1..60}; do
