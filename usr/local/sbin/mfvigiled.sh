@@ -21,7 +21,7 @@ while :; do
   --retry-delay 5 \
   --retry-max-time 60 \
   -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" \
-  https://vigilance2019.meteofrance.com/data/NXFR33_LFPW_.xml
+  http://vigilance2019.meteofrance.com/data/NXFR33_LFPW_.xml
 
   # Pas de vigilance : coul="1"
   # Vigilance jaune : coul="2"
